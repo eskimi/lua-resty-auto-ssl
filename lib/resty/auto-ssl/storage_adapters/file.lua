@@ -39,6 +39,10 @@ function _M.get(self, key)
   return content
 end
 
+function _M.lock(self, key, value, exptime)
+  return self:set(key, value, { exptime = exptime })
+end
+
 function _M.set(self, key, value, options)
   local file, err = io.open(file_path(self, key), "w")
   if err then

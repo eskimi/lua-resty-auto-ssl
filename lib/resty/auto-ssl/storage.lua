@@ -16,7 +16,7 @@ function _M.get_challenge(self, domain, path)
 end
 
 function _M.set_challenge(self, domain, path, value)
-  return self.adapter:set(domain .. ":challenge:" .. path, value)
+  return self.adapter:set(domain .. ":challenge:" .. path, value, { exptime = 60 * 60 })
 end
 
 function _M.delete_challenge(self, domain, path)
@@ -46,18 +46,24 @@ function _M.set_cert(self, domain, fullchain_pem, privkey_pem, cert_pem, expiry)
   -- a single string (regardless of implementation), and we don't have to worry
   -- about race conditions with the public cert and private key being stored
   -- separately and getting out of sync.
+  local expires_at = tonumber(expiry)
   local string, err = self.json_adapter:encode({
     fullchain_pem = fullchain_pem,
     privkey_pem = privkey_pem,
     cert_pem = cert_pem,
-    expiry = tonumber(expiry),
+    expiry = expires_at,
   })
+
   if err then
     return nil, err
   end
 
+  -- will set cert key ttl of 60 days as letsencrypt.org cert expires after 90 days
+  -- ensuring that renewal will happen by renewal.lua
+  local ttl = 60 * 24 * 60 * 60
+
   -- Store the cert under the "latest" alias, which is what this app will use.
-  return self.adapter:set(domain .. ":latest", string)
+  return self.adapter:set(domain .. ":latest", string, { exptime = ttl })
 end
 
 function _M.delete_cert(self, domain)
@@ -110,7 +116,7 @@ function _M.issue_cert_lock(self, domain)
   until unlocked or wait_time > max_time
 
   -- Create a new lock.
-  local ok, err = self.adapter:set(key, lock_rand_value, { exptime = 30 })
+  local ok, err = self.adapter:lock(key, lock_rand_value, 30)
   if not ok then
     return nil, err
   else

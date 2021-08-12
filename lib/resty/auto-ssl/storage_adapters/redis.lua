@@ -78,6 +78,16 @@ function _M.get(self, key)
   return res, err
 end
 
+function _M.lock(self, key, value, exptime)
+  local connection, connection_err = self:get_connection()
+  if connection_err then
+    return false, connection_err
+  end
+
+  key = prefixed_key(self, key)
+  return connection:set(key, value, "EX", exptime, "NX")
+end
+
 function _M.set(self, key, value, options)
   local connection, connection_err = self:get_connection()
   if connection_err then
@@ -85,17 +95,11 @@ function _M.set(self, key, value, options)
   end
 
   key = prefixed_key(self, key)
-  local ok, err = connection:set(key, value)
-  if ok then
-    if options and options["exptime"] then
-      local _, expire_err = connection:expire(key, options["exptime"])
-      if expire_err then
-        ngx.log(ngx.ERR, "auto-ssl: failed to set expire: ", expire_err)
-      end
-    end
+  if options and options["exptime"] then
+    return connection:set(key, value, "EX", options["exptime"])
+  else
+    return connection:set(key, value)
   end
-
-  return ok, err
 end
 
 function _M.delete(self, key)

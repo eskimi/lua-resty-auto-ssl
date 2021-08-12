@@ -26,6 +26,8 @@ RUN yum -y install epel-release && \
     procps-ng \
     redis \
     sudo \
+    net-tools \
+    netcat \
     https://bin.equinox.io/a/6iuHhJeWypm/ngrok-2.3.34-linux-amd64.rpm
 
 RUN mkdir /app
@@ -40,4 +42,5 @@ ENV LUA_CPATH="/tmp/resty-auto-ssl-test-luarocks/lib/lua/5.1/?.so;${LUA_CPATH}"
 
 COPY . /app
 
-CMD ["bash"]
+#CMD ["bash"]
+CMD ["tail", "-f", "/dev/null"]

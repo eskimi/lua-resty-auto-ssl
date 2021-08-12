@@ -9,55 +9,55 @@ services:
       - build_cache:/app/build
     sysctls:
       net.core.somaxconn: 1024
-  centos:
-    build:
-      context: .
-      dockerfile: Dockerfile-test
-    volumes:
-      - .:/app
-      - centos_build_cache:/app/build
-    sysctls:
-      net.core.somaxconn: 1024
-  alpine:
-    build:
-      context: .
-      dockerfile: Dockerfile-test-alpine
-    volumes:
-      - .:/app
-      - alpine_build_cache:/app/build
-    sysctls:
-      net.core.somaxconn: 1024
-  ubuntu:
-    build:
-      context: .
-      dockerfile: Dockerfile-test-ubuntu
-    volumes:
-      - .:/app
-      - ubuntu_build_cache:/app/build
-    sysctls:
-      net.core.somaxconn: 1024
-  openresty1.13:
-    build:
-      context: .
-      dockerfile: Dockerfile-test-openresty1.13
-    volumes:
-      - .:/app
-      - openresty1.13_build_cache:/app/build
-    sysctls:
-      net.core.somaxconn: 1024
-  lua51:
-    build:
-      context: .
-      dockerfile: Dockerfile-test-lua51
-    volumes:
-      - .:/app
-      - lua51_build_cache:/app/build
-    sysctls:
-      net.core.somaxconn: 1024
+#  centos:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-test
+#    volumes:
+#      - .:/app
+#      - centos_build_cache:/app/build
+#    sysctls:
+#      net.core.somaxconn: 1024
+#  alpine:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-test-alpine
+#    volumes:
+#      - .:/app
+#      - alpine_build_cache:/app/build
+#    sysctls:
+#      net.core.somaxconn: 1024
+#  ubuntu:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-test-ubuntu
+#    volumes:
+#      - .:/app
+#      - ubuntu_build_cache:/app/build
+#    sysctls:
+#      net.core.somaxconn: 1024
+#  openresty1.13:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-test-openresty1.13
+#    volumes:
+#      - .:/app
+#      - openresty1.13_build_cache:/app/build
+#    sysctls:
+#      net.core.somaxconn: 1024
+#  lua51:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-test-lua51
+#    volumes:
+#      - .:/app
+#      - lua51_build_cache:/app/build
+#    sysctls:
+#      net.core.somaxconn: 1024
 volumes:
   build_cache:
-  centos_build_cache:
-  alpine_build_cache:
-  ubuntu_build_cache:
-  openresty1.13_build_cache:
-  lua51_build_cache:
+#  centos_build_cache:
+#  alpine_build_cache:
+#  ubuntu_build_cache:
+#  openresty1.13_build_cache:
+#  lua51_build_cache:
